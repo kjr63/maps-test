@@ -1,6 +1,5 @@
 import React from 'react';
-// import Header from './components/header.js';
-// import Content from './components/content.js';
+import OlMap from './components/olmap.js';
 
 export default class WpApp extends React.Component {
     constructor (props) {
@@ -12,7 +11,8 @@ export default class WpApp extends React.Component {
 
     render () {     
         return (
-            <div className="template">
+            <div>
+				<OlMap />
             </div>
         );
     }

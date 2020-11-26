@@ -1,7 +1,7 @@
 {
-  "name": "friba-db",
+  "name": "maps-test",
   "version": "1.0.0",
-  "description": "node.js testisovellus",
+  "description": "OpenLayers testisovellus",
   "main": "index.js",
   "scripts": {
     "build-sass-dev": "node-sass public/sass/main.scss public/css/style.css",
@@ -48,6 +48,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "firebase": "^7.15.3",
+    "ol": "^6.4.3",
     "react-table": "^7.1.0"
   }
 }
