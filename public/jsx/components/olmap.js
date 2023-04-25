@@ -1,5 +1,7 @@
 import React from 'react';
 import Circle from 'ol/geom/Circle.js';
+import Polygon from 'ol/geom/Polygon.js';
+import Point from 'ol/geom/Point.js';
 import Feature from 'ol/Feature.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import Map from 'ol/Map.js';
@@ -9,12 +11,17 @@ import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {fromLonLat} from 'ol/proj';
 
-const image = new CircleStyle({
+// const image = new CircleStyle({
+  // radius: 8,
+  // fill: new Fill({color:[250,128,114,0.5]}),
+  // stroke: new Stroke({color: 'red', width: 3}),
+// });
+const image = new Style({
   radius: 8,
   fill: new Fill({color:[250,128,114,0.5]}),
   stroke: new Stroke({color: 'red', width: 3}),
 });
-
+/*
 const styles = {
   'Point': new Style({
 	image: image,
@@ -254,13 +261,76 @@ vectorSource.addFeature(new Feature(new Circle([5e6, 7e6], 1e6)));
 const vectorLayer = new VectorLayer({
   source: vectorSource,
   style: styleFunction,
+}); */
+
+// const testVectorLayer = new VectorLayer({
+	// source: new VectorSource({
+		// features: new GeoJSON().readFeatures(geojsonTowns),
+	// }),
+	// style: styleFunction,
+// });
+
+const akaaCoords = fromLonLat([ 23.865888764, 61.167145977 ]);
+const circleFeature = new Feature({
+	geometry: new Circle(akaaCoords,8),
+	labelPoint: new Point(akaaCoords),
+	name: 'My Circle',	
 });
+// get the polygon geometry
+//const poly = circleFeature.getGeometry();
+//console.log ("poly: ", poly);
+// Render the feature as a point using the coordinates from labelPoint
+circleFeature.setGeometryName('labelPoint');
+//circleFeature.setGeometry();
+//circleFeature.setStyle(image);
+
+/* circleFeature.setStyle(
+  new Style({
+    renderer(coordinates, state) {
+      const [[x, y], [x1, y1]] = coordinates;
+      const ctx = state.context;
+      const dx = x1 - x;
+      const dy = y1 - y;
+      const radius = Math.sqrt(dx * dx + dy * dy);
+
+      const innerRadius = 0;
+      const outerRadius = radius * 1.4;
+      const gradient = ctx.createRadialGradient(
+        x,
+        y,
+        innerRadius,
+        x,
+        y,
+        outerRadius
+      );
+      gradient.addColorStop(0, 'rgba(255,0,0,0)');
+      gradient.addColorStop(0.6, 'rgba(255,0,0,0.2)');
+      gradient.addColorStop(1, 'rgba(255,0,0,0.8)');
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, 2 * Math.PI, true);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,0,0,1)';
+      ctx.stroke();
+
+      //renderLabelText(ctx, x, y, circleFeature.get('label-color'));
+    },
+    hitDetectionRenderer(coordinates, state) {
+      const [x, y] = coordinates[0];
+      const ctx = state.context;
+      //renderLabelText(ctx, x, y, circleFeature.get('label-color'));
+    },
+  })
+); */
+
+
+
+
 
 const testVectorLayer = new VectorLayer({
 	source: new VectorSource({
-		features: new GeoJSON().readFeatures(geojsonTowns),
+		features: [circleFeature],
 	}),
-	style: styleFunction,
 });
 
 export default class OlMap extends React.Component {
@@ -268,7 +338,6 @@ export default class OlMap extends React.Component {
         super(props);
     }
 	componentDidMount () {
-
 		const map = new Map({
 		  layers: [
 			new TileLayer({
