@@ -11,16 +11,16 @@ import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {fromLonLat} from 'ol/proj';
 
-// const image = new CircleStyle({
-  // radius: 8,
-  // fill: new Fill({color:[250,128,114,0.5]}),
-  // stroke: new Stroke({color: 'red', width: 3}),
-// });
-const image = new Style({
+const image = new CircleStyle({
   radius: 8,
   fill: new Fill({color:[250,128,114,0.5]}),
   stroke: new Stroke({color: 'red', width: 3}),
 });
+// const image = new Style({
+  // radius: 8,
+  // fill: new Fill({color:[250,128,114,0.5]}),
+  // stroke: new Stroke({color: 'red', width: 3}),
+// });
 /*
 const styles = {
   'Point': new Style({
@@ -271,16 +271,25 @@ const vectorLayer = new VectorLayer({
 // });
 
 const akaaCoords = fromLonLat([ 23.865888764, 61.167145977 ]);
+// const circleFeature = new Feature({
+	// geometry: new Circle(akaaCoords,8),
+	// labelPoint: new Point(akaaCoords),
+	// name: 'My Circle',	
+// });
 const circleFeature = new Feature({
-	geometry: new Circle(akaaCoords,8),
-	labelPoint: new Point(akaaCoords),
-	name: 'My Circle',	
+	geometry: new Point(akaaCoords),
 });
+circleFeature.setStyle(new Style({
+	image: image
+}));
+//circleFeature.setGeometryName('labelPoint');
+//circleFeature.setGeometry();
+//circleFeature.setStyle([{stroke: new Stroke({color: 'red', width: 3})}]);
+
 // get the polygon geometry
 //const poly = circleFeature.getGeometry();
 //console.log ("poly: ", poly);
 // Render the feature as a point using the coordinates from labelPoint
-circleFeature.setGeometryName('labelPoint');
 //circleFeature.setGeometry();
 //circleFeature.setStyle(image);
 
