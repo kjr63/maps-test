@@ -1,0 +1,44 @@
+/*
+    Created on : 28.2.2020, 12:53:40
+    Author     : risberg
+*/
+.header {
+    //background-color: $color-pri;
+    font-size: 8rem;
+    display: flex;
+    justify-content: left;
+	align-items: center;
+	padding: 1.6rem;
+	//transform: skewY(20deg);
+	transform:	translateY(-12rem);
+    &__text {
+        &-1 {
+			color: $color-sext;
+			font-family: sans-serif;
+			font-weight: bold;
+			text-shadow: 3px 3px 5px $color-ter;
+        }
+		&-2 {
+			color: DarkGrey;
+			font-size: 3.2rem;
+		}
+    }
+	&__image {
+		//padding: 1.6rem;
+		//border: 8px solid red;
+	}
+}
+
+.image_block {
+	text-align: right;
+	//border: 4px solid green;
+	&__image {
+		//width: 64rem;
+		//height: 32rem;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		//border: 2px solid yellow;
+	}
+}
+
