@@ -1,5 +1,5 @@
 import React from 'react';
-import {Overlay} from 'ol';
+import Overlay from 'ol/Overlay.js';
 import Circle from 'ol/geom/Circle.js';
 import Polygon from 'ol/geom/Polygon.js';
 import Point from 'ol/geom/Point.js';
@@ -17,11 +17,7 @@ const image = new CircleStyle({
   fill: new Fill({color:[250,128,114,0.5]}),
   stroke: new Stroke({color: 'red', width: 3}),
 });
-var overlay = new Overlay({
-  element: tooltip,
-  offset: [10, 0],
-  positioning: 'bottom-left'
-});
+
 // const image = new Style({
   // radius: 8,
   // fill: new Fill({color:[250,128,114,0.5]}),
@@ -284,7 +280,7 @@ const akaaCoords = fromLonLat([ 23.865888764, 61.167145977 ]);
 // });
 const akaaFeature = new Feature({
 	geometry: new Point(akaaCoords),
-	name: 'Akaa',
+	name: '<div class="town">Akaa</div>',
 	hepskukkuu: 'Myös Akaa'
 });
 akaaFeature.setStyle(new Style({
@@ -347,7 +343,7 @@ akaaFeature.setStyle(new Style({
 
 const testVectorLayer = new VectorLayer({
 	source: new VectorSource({
-		features: [akaaFeature],
+		features: [akaaFeature]
 	}),
 });
 
@@ -356,6 +352,12 @@ export default class OlMap extends React.Component {
         super(props);
     }
 	componentDidMount () {
+		const tooltip = document.getElementById('tooltip');
+		const overlay = new Overlay({
+			element: tooltip,
+			offset: [10, 0],
+			positioning: 'bottom-left'
+		});		
 		const map = new Map({
 		  layers: [
 			new TileLayer({
@@ -369,6 +371,8 @@ export default class OlMap extends React.Component {
 			zoom: 6,
 		  }),
 		});
+		//overlay.setPosition(akaaCoords);		
+		map.addOverlay(overlay);		
 		map.on('click', function(evt) {
 		  if (map.forEachFeatureAtPixel(evt.pixel,
 			function(feature) {
@@ -378,10 +382,29 @@ export default class OlMap extends React.Component {
 			alert('click');
 		  }
 		});
-		
+
 		const status = document.getElementById('status');
 
 		let selected = null;		
+/* 		map.on('pointermove', function (e) {
+		  if (selected !== null) {
+			//selected.setStyle(undefined);
+			selected = null;
+		  }
+
+		  map.forEachFeatureAtPixel(e.pixel, function (f) {
+			selected = f;
+			//selectStyle.getFill().setColor(f.get('COLOR') || '#eeeeee');
+			//f.setStyle(selectStyle);
+			return true;
+		  });
+
+		  if (selected) {
+			status.innerHTML = selected.get('name')+' '+selected.get('hepskukkuu');
+		  } else {
+			status.innerHTML = 'Eeva';
+		  }
+		}); */
 		map.on('pointermove', function (e) {
 		  if (selected !== null) {
 			//selected.setStyle(undefined);
@@ -396,18 +419,20 @@ export default class OlMap extends React.Component {
 		  });
 
 		  if (selected) {
-			status.innerHTML = selected.get('name')+'<br /> '+selected.get('hepskukkuu');
+			//console.log('tooltip hover');
+			overlay.setPosition(e.coordinate);
+			tooltip.innerHTML = selected.get('name');
 		  } else {
-			status.innerHTML = '&nbsp;';
+			tooltip.innerHTML = '';
 		  }
 		});		
 	}
     render () {
         return (
-			<div>			
-				<main id="map" className="map">
-					<div id="status">Aatami</div>			
-				</main>
+			<div>
+				<div id="status">TONTTIVUOKRAT</div>}
+				<div id="tooltip"></div>
+				<main id="map" className="map"></main>					
 			</div>
         );
     }
