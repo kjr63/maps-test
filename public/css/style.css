@@ -145,6 +145,7 @@ table, th, td {
 
 #status {
   font-size: 2rem;
+  display: none;
   /* position: fixed; */
   /* top: 80px; */
   /* left: 0; */
@@ -154,8 +155,28 @@ table, th, td {
 
 #tooltip {
   font-size: 2rem;
-  background-color: lightgray;
-  border: 1px solid #454140; }
+  border: 1px solid #454140;
+  padding: 1rem;
+  background-color: white; }
 
-.town {
-  font-size: 2rem; }
+.town-title {
+  font-size: 2rem;
+  background-color: lightgray;
+  margin-bottom: 8px; }
+
+.town-subt {
+  font-size: 1.5rem;
+  font-weight: bold; }
+
+.town-value {
+  font-size: 1.5rem; }
+
+#title {
+  font-size: 2rem;
+  background-color: white;
+  border: 1px solid #454140;
+  border-radius: 2rem;
+  margin-top: 8rem;
+  margin-left: 1rem;
+  padding: 8px;
+  width: 20%; }

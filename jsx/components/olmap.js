@@ -11,13 +11,13 @@ import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style.js';
 import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {fromLonLat} from 'ol/proj';
+import Control from 'ol/control/Control.js';
 
 const image = new CircleStyle({
   radius: 8,
   fill: new Fill({color:[250,128,114,0.5]}),
   stroke: new Stroke({color: 'red', width: 3}),
 });
-
 // const image = new Style({
   // radius: 8,
   // fill: new Fill({color:[250,128,114,0.5]}),
@@ -278,10 +278,34 @@ const akaaCoords = fromLonLat([ 23.865888764, 61.167145977 ]);
 	// labelPoint: new Point(akaaCoords),
 	// name: 'My Circle',	
 // });
+
+const outEnd = '</div>';
+const outTitle = '<div class="town-title">Asunnon kunnassa ';
+const outSubt1 = '<div class="town-subt">keskimääräinen hinta per m2</div>';
+const outSubt2 = '<div class="town-subt">alin hinta per m2</div>';
+const outSubt3 = '<div class="town-subt">korkein hinta per m2</div>';
+const outSubt4 = '<div class="town-subt">keskimääräinen tonttivuokra per m2/kk</div>';
+const outSubt5 = '<div class="town-subt">keskimääräinen tonttihinta per m2 </div>';
+const outSubt6 = '<div class="town-subt">alin tonttivuokra per m2/kk </div>';
+const outSubt7 = '<div class="town-subt">alin tonttihinta per m2 </div>';
+const outSubt8 = '<div class="town-subt">korkein tonttivuokra per m2/kk </div>';
+const outSubt9 = '<div class="town-subt">korkein tonttihinta per m2 </div>';
+const outVal = '<div class="town-value">';
+
+
 const akaaFeature = new Feature({
 	geometry: new Point(akaaCoords),
-	name: '<div class="town">Akaa</div>',
-	hepskukkuu: 'Myös Akaa'
+	output:
+		outTitle+'<b>Akaa</b>'+outEnd+
+		outSubt1+outVal+'100e'+outEnd+ //Keskimääräinen hinta per m2
+		outSubt2+outVal+'100e'+outEnd+ //Alin hinta per m2
+		outSubt3+outVal+'100e'+outEnd+ //Korkein hinta per m2
+		outSubt4+outVal+'100e'+outEnd+ //Keskimääräinen tonttivuokra
+		outSubt5+outVal+'100e'+outEnd+ //Keskimääräinen tonttihinta
+		outSubt6+outVal+'100e'+outEnd+ //Alin tonttivuokra
+		outSubt7+outVal+'100e'+outEnd+ //Alin tonttihinta
+		outSubt8+outVal+'100e'+outEnd+ //Korkein tonttivuokra
+		outSubt9+outVal+'100e'+outEnd  //Korkein tonttihinta
 });
 akaaFeature.setStyle(new Style({
 	image: image,
@@ -352,28 +376,32 @@ export default class OlMap extends React.Component {
         super(props);
     }
 	componentDidMount () {
+		const title = document.getElementById('title');		
+		const mapTitle = new Control({element: title});		
 		const tooltip = document.getElementById('tooltip');
+		const tiptitle = document.getElementById('tiptitle');
 		const overlay = new Overlay({
 			element: tooltip,
 			offset: [10, 0],
 			positioning: 'bottom-left'
 		});		
 		const map = new Map({
-		  layers: [
-			new TileLayer({
-			  source: new OSM(),
-			}),
+			layers: [
+				new TileLayer({
+				  source: new OSM(),
+				}),
 			testVectorLayer,
-		  ],
-		  target: 'map',
-		  view: new View({
-			center: fromLonLat([ 25.749498, 62.241678 ]),
-			zoom: 6,
-		  }),
+			],
+			target: 'map',
+			view: new View({
+				center: fromLonLat([ 25.749498, 62.241678 ]),
+				zoom: 6,
+			}),
 		});
-		//overlay.setPosition(akaaCoords);		
+		//overlay.setPosition(akaaCoords);
+		map.addControl(mapTitle);
 		map.addOverlay(overlay);		
-		map.on('click', function(evt) {
+/* 		map.on('click', function(evt) {
 		  if (map.forEachFeatureAtPixel(evt.pixel,
 			function(feature) {
 			  return feature === akaaFeature;
@@ -381,7 +409,7 @@ export default class OlMap extends React.Component {
 		  ) {
 			alert('click');
 		  }
-		});
+		}); */
 
 		const status = document.getElementById('status');
 
@@ -408,6 +436,7 @@ export default class OlMap extends React.Component {
 		map.on('pointermove', function (e) {
 		  if (selected !== null) {
 			//selected.setStyle(undefined);
+			overlay.setPosition();
 			selected = null;
 		  }
 
@@ -421,7 +450,7 @@ export default class OlMap extends React.Component {
 		  if (selected) {
 			//console.log('tooltip hover');
 			overlay.setPosition(e.coordinate);
-			tooltip.innerHTML = selected.get('name');
+			tooltip.innerHTML = selected.get('output');
 		  } else {
 			tooltip.innerHTML = '';
 		  }
@@ -430,7 +459,8 @@ export default class OlMap extends React.Component {
     render () {
         return (
 			<div>
-				<div id="status">TONTTIVUOKRAT</div>}
+				<div id="status"></div>}
+				<div id="title">TONTTIVUOKRAT 2022</div>}
 				<div id="tooltip"></div>
 				<main id="map" className="map"></main>					
 			</div>
