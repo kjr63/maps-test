@@ -1,0 +1,8 @@
+export default const data = {
+	akaa: 		['Akaa',		'100e','100e','100e','100e','100e','100e','100e','100e','100e'],
+	alajarvi: 	['Alajärvi',	'100e','100e','100e','100e','100e','100e','100e','100e','100e'],
+};
+
+export function initialize () {
+	
+}

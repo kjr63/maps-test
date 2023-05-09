@@ -12,272 +12,17 @@ import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {fromLonLat} from 'ol/proj';
 import Control from 'ol/control/Control.js';
+//import {akaaData, alajarviData} from '../../data/data.js';
+
+//console.log ('import', akaaData);
+
+let featureCollection = [];
 
 const image = new CircleStyle({
   radius: 8,
   fill: new Fill({color:[250,128,114,0.5]}),
   stroke: new Stroke({color: 'red', width: 3}),
 });
-// const image = new Style({
-  // radius: 8,
-  // fill: new Fill({color:[250,128,114,0.5]}),
-  // stroke: new Stroke({color: 'red', width: 3}),
-// });
-/*
-const styles = {
-  'Point': new Style({
-	image: image,
-  }),
-  'LineString': new Style({
-	stroke: new Stroke({
-	  color: 'green',
-	  width: 1,
-	}),
-  }),
-  'MultiLineString': new Style({
-	stroke: new Stroke({
-	  color: 'green',
-	  width: 1,
-	}),
-  }),
-  'MultiPoint': new Style({
-	image: image,
-  }),
-  'MultiPolygon': new Style({
-	stroke: new Stroke({
-	  color: 'yellow',
-	  width: 1,
-	}),
-	fill: new Fill({
-	  color: 'rgba(255, 255, 0, 0.1)',
-	}),
-  }),
-  'Polygon': new Style({
-	stroke: new Stroke({
-	  color: 'blue',
-	  lineDash: [4],
-	  width: 3,
-	}),
-	fill: new Fill({
-	  color: 'rgba(0, 0, 255, 0.1)',
-	}),
-  }),
-  'GeometryCollection': new Style({
-	stroke: new Stroke({
-	  color: 'magenta',
-	  width: 2,
-	}),
-	fill: new Fill({
-	  color: 'magenta',
-	}),
-	image: new CircleStyle({
-	  radius: 10,
-	  fill: null,
-	  stroke: new Stroke({
-		color: 'magenta',
-	  }),
-	}),
-  }),
-  'Circle': new Style({
-	stroke: new Stroke({
-	  color: 'red',
-	  width: 2,
-	}),
-	fill: new Fill({
-	  color: 'rgba(255,0,0,0.2)',
-	}),
-  }),
-};
-
-const styleFunction = function (feature) {
-  return styles[feature.getGeometry().getType()];
-};
-
-const geojsonObject = {
-  'type': 'FeatureCollection',
-  'crs': {
-	'type': 'name',
-	'properties': {
-	  'name': 'EPSG:3857',
-	},
-  },
-  'features': [
-	{
-	  'type': 'Feature',
-	  'geometry': {
-		'type': 'Point',
-		'coordinates': [0, 0],
-	  },
-	},
-	{
-	  'type': 'Feature',
-	  'geometry': {
-		'type': 'LineString',
-		'coordinates': [
-		  [4e6, -2e6],
-		  [8e6, 2e6],
-		],
-	  },
-	},
-	{
-	  'type': 'Feature',
-	  'geometry': {
-		'type': 'LineString',
-		'coordinates': [
-		  [4e6, 2e6],
-		  [8e6, -2e6],
-		],
-	  },
-	},
-	{
-	  'type': 'Feature',
-	  'geometry': {
-		'type': 'Polygon',
-		'coordinates': [
-		  [
-			[-5e6, -1e6],
-			[-3e6, -1e6],
-			[-4e6, 1e6],
-			[-5e6, -1e6],
-		  ],
-		],
-	  },
-	},
-	{
-	  'type': 'Feature',
-	  'geometry': {
-		'type': 'MultiLineString',
-		'coordinates': [
-		  [
-			[-1e6, -7.5e5],
-			[-1e6, 7.5e5],
-		  ],
-		  [
-			[1e6, -7.5e5],
-			[1e6, 7.5e5],
-		  ],
-		  [
-			[-7.5e5, -1e6],
-			[7.5e5, -1e6],
-		  ],
-		  [
-			[-7.5e5, 1e6],
-			[7.5e5, 1e6],
-		  ],
-		],
-	  },
-	},
-	{
-	  'type': 'Feature',
-	  'geometry': {
-		'type': 'MultiPolygon',
-		'coordinates': [
-		  [
-			[
-			  [-5e6, 6e6],
-			  [-3e6, 6e6],
-			  [-3e6, 8e6],
-			  [-5e6, 8e6],
-			  [-5e6, 6e6],
-			],
-		  ],
-		  [
-			[
-			  [-2e6, 6e6],
-			  [0, 6e6],
-			  [0, 8e6],
-			  [-2e6, 8e6],
-			  [-2e6, 6e6],
-			],
-		  ],
-		  [
-			[
-			  [1e6, 6e6],
-			  [3e6, 6e6],
-			  [3e6, 8e6],
-			  [1e6, 8e6],
-			  [1e6, 6e6],
-			],
-		  ],
-		],
-	  },
-	},
-	{
-	  'type': 'Feature',
-	  'geometry': {
-		'type': 'GeometryCollection',
-		'geometries': [
-		  {
-			'type': 'LineString',
-			'coordinates': [
-			  [-5e6, -5e6],
-			  [0, -5e6],
-			],
-		  },
-		  {
-			'type': 'Point',
-			'coordinates': [4e6, -5e6],
-		  },
-		  {
-			'type': 'Polygon',
-			'coordinates': [
-			  [
-				[1e6, -6e6],
-				[3e6, -6e6],
-				[2e6, -4e6],
-				[1e6, -6e6],
-			  ],
-			],
-		  },
-		],
-	  },
-	},
-  ],
-};
-
-const geojsonTowns = {
-	'type': 'FeatureCollection',
-	'crs': {
-		'type': 'name',
-		'properties': {
-		  'name': 'EPSG:3857',
-		},
-	},
-	'features': [
-		{
-		  'type': 'Feature',
-		  'geometry': {
-			'type': 'Point',
-			'coordinates': fromLonLat([ 23.865888764, 61.167145977 ]),
-		  },
-		},
-	]			
-};
-
-const vectorSource = new VectorSource({
-  features: new GeoJSON().readFeatures(geojsonObject),
-});
-
-vectorSource.addFeature(new Feature(new Circle([5e6, 7e6], 1e6)));
-
-const vectorLayer = new VectorLayer({
-  source: vectorSource,
-  style: styleFunction,
-}); */
-
-// const testVectorLayer = new VectorLayer({
-	// source: new VectorSource({
-		// features: new GeoJSON().readFeatures(geojsonTowns),
-	// }),
-	// style: styleFunction,
-// });
-
-const akaaCoords = fromLonLat([ 23.865888764, 61.167145977 ]);
-// const circleFeature = new Feature({
-	// geometry: new Circle(akaaCoords,8),
-	// labelPoint: new Point(akaaCoords),
-	// name: 'My Circle',	
-// });
 
 const outEnd = '</div>';
 const outTitle = '<div class="town-title">Asunnon kunnassa ';
@@ -291,83 +36,80 @@ const outSubt7 = '<div class="town-subt">alin tonttihinta per m2 </div>';
 const outSubt8 = '<div class="town-subt">korkein tonttivuokra per m2/kk </div>';
 const outSubt9 = '<div class="town-subt">korkein tonttihinta per m2 </div>';
 const outVal = '<div class="town-value">';
+function outputProperty (data) {
+	let result = 
+		outTitle+'<b>'+data[0]+'</b>'+outEnd+
+		outSubt1+outVal+data[1]+outEnd+ //Keskimääräinen hinta per m2
+		outSubt4+outVal+data[2]+outEnd+ //Keskimääräinen tonttivuokra
+		outSubt5+outVal+data[3]+outEnd+ //Keskimääräinen tonttihinta
+		outSubt6+outVal+data[4]+outEnd+ //Alin tonttivuokra
+		outSubt7+outVal+data[5]+outEnd+ //Alin tonttihinta
+		outSubt8+outVal+data[6]+outEnd+ //Korkein tonttivuokra
+		outSubt9+outVal+data[7]+outEnd+ //Korkein tonttihinta
+		outSubt2+outVal+data[8]+outEnd+ //Alin hinta per m2
+		outSubt3+outVal+data[9]+outEnd ; //Korkein hinta per m2		
+	return result;
+}
 
-
+const akaaCoords = fromLonLat([ 23.865888764, 61.167145977 ]);
+const akaaData = ['Akaa','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
 const akaaFeature = new Feature({
 	geometry: new Point(akaaCoords),
-	output:
-		outTitle+'<b>Akaa</b>'+outEnd+
-		outSubt1+outVal+'100e'+outEnd+ //Keskimääräinen hinta per m2
-		outSubt2+outVal+'100e'+outEnd+ //Alin hinta per m2
-		outSubt3+outVal+'100e'+outEnd+ //Korkein hinta per m2
-		outSubt4+outVal+'100e'+outEnd+ //Keskimääräinen tonttivuokra
-		outSubt5+outVal+'100e'+outEnd+ //Keskimääräinen tonttihinta
-		outSubt6+outVal+'100e'+outEnd+ //Alin tonttivuokra
-		outSubt7+outVal+'100e'+outEnd+ //Alin tonttihinta
-		outSubt8+outVal+'100e'+outEnd+ //Korkein tonttivuokra
-		outSubt9+outVal+'100e'+outEnd  //Korkein tonttihinta
+	output: outputProperty (akaaData)
+	
 });
 akaaFeature.setStyle(new Style({
 	image: image,
-	// text:  new Text({
-         // font: 'Normal 12px Arial',
-         // text: 'Akaa',
-    // }) 
 }));
-//circleFeature.setGeometryName('labelPoint');
-//circleFeature.setGeometry();
-//circleFeature.setStyle([{stroke: new Stroke({color: 'red', width: 3})}]);
-
-// get the polygon geometry
-//const poly = circleFeature.getGeometry();
-//console.log ("poly: ", poly);
-// Render the feature as a point using the coordinates from labelPoint
-//circleFeature.setGeometry();
-//circleFeature.setStyle(image);
-
-/* circleFeature.setStyle(
-  new Style({
-    renderer(coordinates, state) {
-      const [[x, y], [x1, y1]] = coordinates;
-      const ctx = state.context;
-      const dx = x1 - x;
-      const dy = y1 - y;
-      const radius = Math.sqrt(dx * dx + dy * dy);
-
-      const innerRadius = 0;
-      const outerRadius = radius * 1.4;
-      const gradient = ctx.createRadialGradient(
-        x,
-        y,
-        innerRadius,
-        x,
-        y,
-        outerRadius
-      );
-      gradient.addColorStop(0, 'rgba(255,0,0,0)');
-      gradient.addColorStop(0.6, 'rgba(255,0,0,0.2)');
-      gradient.addColorStop(1, 'rgba(255,0,0,0.8)');
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, 2 * Math.PI, true);
-      ctx.fillStyle = gradient;
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255,0,0,1)';
-      ctx.stroke();
-
-      //renderLabelText(ctx, x, y, circleFeature.get('label-color'));
-    },
-    hitDetectionRenderer(coordinates, state) {
-      const [x, y] = coordinates[0];
-      const ctx = state.context;
-      //renderLabelText(ctx, x, y, circleFeature.get('label-color'));
-    },
-  })
-); */
-
+featureCollection.push (akaaFeature);
+const alajarviCoords = fromLonLat([ 23.817522812, 63.001273254 ]);
+const alajarviData = ['Alajärvi','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
+const alajarviFeature = new Feature({
+	geometry: new Point(alajarviCoords),
+	output: outputProperty (alajarviData)
+	
+});
+alajarviFeature.setStyle(new Style({
+	image: image,
+}));
+featureCollection.push (alajarviFeature);
+const helsinkiCoords = fromLonLat([ 24.943536799, 60.166640739 ]);
+const helsinkiData = ['Helsinki','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
+const helsinkiFeature = new Feature({
+	geometry: new Point(helsinkiCoords),
+	output: outputProperty (helsinkiData)
+	
+});
+helsinkiFeature.setStyle(new Style({
+	image: image,
+}));
+featureCollection.push (helsinkiFeature);
+const espooCoords = fromLonLat([ 24.656728549, 60.206376371 ]);
+const espooData = ['Espoo','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
+const espooFeature = new Feature({
+	geometry: new Point(espooCoords),
+	output: outputProperty (espooData)
+	
+});
+espooFeature.setStyle(new Style({
+	image: image,
+}));
+featureCollection.push (espooFeature);
+const vantaaCoords = fromLonLat([ 25.006641332, 60.298133721 ]);
+const vantaaData = ['Vantaa','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
+const vantaaFeature = new Feature({
+	geometry: new Point(vantaaCoords),
+	output: outputProperty (vantaaData)
+	
+});
+vantaaFeature.setStyle(new Style({
+	image: image,
+}));
+featureCollection.push (vantaaFeature);
 
 const testVectorLayer = new VectorLayer({
 	source: new VectorSource({
-		features: [akaaFeature]
+		features: featureCollection
 	}),
 });
 
@@ -376,14 +118,14 @@ export default class OlMap extends React.Component {
         super(props);
     }
 	componentDidMount () {
-		const title = document.getElementById('title');		
-		const mapTitle = new Control({element: title});		
+		const title = document.getElementById('title');
 		const tooltip = document.getElementById('tooltip');
-		const tiptitle = document.getElementById('tiptitle');
+		//const tiptitle = document.getElementById('tiptitle');		
+		const mapTitle = new Control({element: title});		
 		const overlay = new Overlay({
 			element: tooltip,
 			offset: [10, 0],
-			positioning: 'bottom-left'
+			positioning: 'center-left'
 		});		
 		const map = new Map({
 			layers: [
