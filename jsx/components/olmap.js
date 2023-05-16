@@ -18,11 +18,43 @@ import Control from 'ol/control/Control.js';
 
 let featureCollection = [];
 
+// const fc =  { 
+	// "type": "FeatureCollection",
+  // 'crs': {
+    // 'type': 'name',
+    // 'properties': {
+      // 'name': 'EPSG:3857',
+    // },
+  // },	
+	// "features": [
+		// { 	
+			// "type": "Feature",
+			// "geometry": { 
+				// "type": 'Point',
+				// "coordinates": [ 23.865888764, 61.167145977 ]
+			// },
+			// "properties": {
+				// "name": "Akaa",
+				// "color": "red",
+				// "imageThumbUrl": ""
+			// }
+		// }
+	// ],
+// };
+
 const image = new CircleStyle({
   radius: 8,
   fill: new Fill({color:[250,128,114,0.5]}),
   stroke: new Stroke({color: 'red', width: 3}),
 });
+// const styles = {
+  // 'Point': new Style({
+    // image: image,
+  // })
+// }
+// const styleFunction = function (feature) {
+  // return styles[feature.getGeometry().getType()];
+// };
 
 const outEnd = '</div>';
 const outTitle = '<div class="town-title">Asunnon kunnassa ';
@@ -36,7 +68,7 @@ const outSubt7 = '<div class="town-subt">alin tonttihinta per m2 </div>';
 const outSubt8 = '<div class="town-subt">korkein tonttivuokra per m2/kk </div>';
 const outSubt9 = '<div class="town-subt">korkein tonttihinta per m2 </div>';
 const outVal = '<div class="town-value">';
-function outputProperty (data) {
+function outputTooltip (data) {
 	let result = 
 		outTitle+'<b>'+data[0]+'</b>'+outEnd+
 		outSubt1+outVal+data[1]+outEnd+ //Keskimääräinen hinta per m2
@@ -51,33 +83,62 @@ function outputProperty (data) {
 	return result;
 }
 
-const akaaCoords = fromLonLat([ 23.865888764, 61.167145977 ]);
-const akaaData = ['Akaa','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
-const akaaFeature = new Feature({
-	geometry: new Point(akaaCoords),
-	output: outputProperty (akaaData)
-	
-});
-akaaFeature.setStyle(new Style({
-	image: image,
-}));
-featureCollection.push (akaaFeature);
-const alajarviCoords = fromLonLat([ 23.817522812, 63.001273254 ]);
-const alajarviData = ['Alajärvi','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
-const alajarviFeature = new Feature({
-	geometry: new Point(alajarviCoords),
-	output: outputProperty (alajarviData)
-	
-});
-alajarviFeature.setStyle(new Style({
-	image: image,
-}));
-featureCollection.push (alajarviFeature);
-const helsinkiCoords = fromLonLat([ 24.943536799, 60.166640739 ]);
+const mapData = [
+
+	{	town: 'Helsinki',
+		coords: fromLonLat([ 24.943536799, 60.166640739 ]),
+		avPrice: 		'100e',
+		avLandrent: 	'100e',
+		avLandPrice:	'100e',
+		lowLandRent:	'100e',
+		lowLandPrice:	'100e',
+		highLandRent:	'100e',
+		highLandPrice:	'100e',
+		lowPrice:		'100e',
+		highPrice:		'100e'
+	},
+	{	town: 'Espoo',
+		coords: fromLonLat([ 24.656728549, 60.206376371 ]),
+		avPrice: 		'100e',
+		avLandrent: 	'100e',
+		avLandPrice:	'100e',
+		lowLandRent:	'100e',
+		lowLandPrice:	'100e',
+		highLandRent:	'100e',
+		highLandPrice:	'100e',
+		lowPrice:		'100e',
+		highPrice:		'100e'
+	},	
+];
+
+for ( let i=0; i < mapData.length; i++ ) {
+	const dataOutput = [
+		mapData [i].town,
+		mapData [i].avPrice,
+		mapData [i].avLandrent,
+		mapData [i].avLandPrice,
+		mapData [i].lowLandRent,
+		mapData [i].lowLandPrice,
+		mapData [i].highLandRent,
+		mapData [i].highLandPrice,
+		mapData [i].lowPrice,
+		mapData [i].highPrice		
+	];
+	const feature = new Feature ({
+		geometry: new Point (mapData [i].coords),
+		output: outputTooltip (dataOutput)
+	});
+	feature.setStyle(new Style({
+		image: image,
+	}));
+	featureCollection.push (feature);	
+}
+
+/* const helsinkiCoords = fromLonLat([ 24.943536799, 60.166640739 ]);
 const helsinkiData = ['Helsinki','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
 const helsinkiFeature = new Feature({
 	geometry: new Point(helsinkiCoords),
-	output: outputProperty (helsinkiData)
+	output: outputTooltip (helsinkiData)
 	
 });
 helsinkiFeature.setStyle(new Style({
@@ -88,7 +149,7 @@ const espooCoords = fromLonLat([ 24.656728549, 60.206376371 ]);
 const espooData = ['Espoo','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
 const espooFeature = new Feature({
 	geometry: new Point(espooCoords),
-	output: outputProperty (espooData)
+	output: outputTooltip (espooData)
 	
 });
 espooFeature.setStyle(new Style({
@@ -99,15 +160,21 @@ const vantaaCoords = fromLonLat([ 25.006641332, 60.298133721 ]);
 const vantaaData = ['Vantaa','100e','100e','100e','100e','100e','100e','100e','100e','100e'];
 const vantaaFeature = new Feature({
 	geometry: new Point(vantaaCoords),
-	output: outputProperty (vantaaData)
-	
+	output: outputTooltip (vantaaData)
 });
 vantaaFeature.setStyle(new Style({
 	image: image,
 }));
-featureCollection.push (vantaaFeature);
+featureCollection.push (vantaaFeature); */
 
-const testVectorLayer = new VectorLayer({
+// const testVectorLayer = new VectorLayer({
+	// source: new VectorSource({
+		// features: new GeoJSON().readFeatures(fc)
+	// }),
+	// style: styleFunction
+// });
+
+const vectorLayer = new VectorLayer({
 	source: new VectorSource({
 		features: featureCollection
 	}),
@@ -132,12 +199,12 @@ export default class OlMap extends React.Component {
 				new TileLayer({
 				  source: new OSM(),
 				}),
-			testVectorLayer,
+				vectorLayer,
 			],
 			target: 'map',
 			view: new View({
-				center: fromLonLat([ 25.749498, 62.241678 ]),
-				zoom: 6,
+				center: fromLonLat([ 25.749498, 64.241678 ]),
+				zoom: 5,
 			}),
 		});
 		//overlay.setPosition(akaaCoords);
@@ -176,26 +243,27 @@ export default class OlMap extends React.Component {
 		  }
 		}); */
 		map.on('pointermove', function (e) {
-		  if (selected !== null) {
+			
+			if (selected !== null) {
 			//selected.setStyle(undefined);
 			overlay.setPosition();
 			selected = null;
-		  }
+			}
 
-		  map.forEachFeatureAtPixel(e.pixel, function (f) {
+			map.forEachFeatureAtPixel(e.pixel, function (f) {
 			selected = f;
 			//selectStyle.getFill().setColor(f.get('COLOR') || '#eeeeee');
 			//f.setStyle(selectStyle);
 			return true;
-		  });
+			});
 
-		  if (selected) {
+			if (selected) {
 			//console.log('tooltip hover');
 			overlay.setPosition(e.coordinate);
 			tooltip.innerHTML = selected.get('output');
-		  } else {
+			} else {
 			tooltip.innerHTML = '';
-		  }
+			}
 		});		
 	}
     render () {
