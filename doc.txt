@@ -1,0 +1,188 @@
+Lähteet ja laskentakaavat (esimerkkinä Helsinki)
+=================================================
+--------------------------------------------------
+
+
+Asuntojen, koko kiinteistön, hinnat
+====================================
+
+
+avprice
+--------
+
+Saadaan sivustolta
+https://www.asuntojenhinnat.fi/myytyjen-asuntojen-tilastot/kunta/helsinki
+
+Sivulla on grafiikka, josta hiirellä saa näkyviin toteutuneuden kauppojen keskihinnat vuosineljänneksittäin.
+
+avprice = käytetään vuoden TOISEN neljänneksen hintaa
+........................................................
+
+
+lowPrice
+--------
+
+Edellä mainitulla sivulla on myös keskihinnat alueittain kunnassa
+
+lowPrice = halvimman alueen keskihinta vuoden 2. neljänneksellä
+.................................................................
+
+
+
+highPrice
+----------
+
+highPrice = kuten lowPrice mutta kalleimman alueen keskihinta
+..............................................................
+
+
+TONTTIARVOT
+=============
+
+
+lowLandPrice
+-------------
+
+Tämä on "kova" hintaindikaattori ja saadaan Maanmittauslaitoksen Kauppahintatilastosta osoitteessa
+
+https://khr.maanmittauslaitos.fi/tilastopalvelu/rest/API/kiinteistokauppojen-tilastopalvelu.html?v=2023.0.0#t21g2_x_2022_x_Kunta
+
+Matalimmaksi hinnaksi asetetetaan rakentamattomien pientalotonttien
+yksityiseltä sektorilta ostettujen tonttien keskiarvohinta, eli rajatontin arvo
+
+lowLandPrice = alin rakennetun tontin arvo = rakentamattoman tontin keskimääräinen kauppahinta + 25%
+.....................................................................................................
+
+25% on arvio joka tulee hintaan lisää kehittamiseen liittyvistä veroluonteisista maksuista ja maaverosta
+
+
+highLandPrice
+--------------
+
+Määrittämiseen käytetään kahta menetelmää ja tulokseksi annetaan menetelmien antamien tulosten keskiarvo.
+
+Menetelmät ovat 1.erotusarvomenetelmä ja 2.jakosuhdemenetelmä.
+
+1.Erotusarvomenetelmä
+----------------------
+
+On "kauppa-arvomenetelmän" sovellutus.
+
+Kun tiedämme kaksi kovaa hintatietoa, rajatontin kauppa-arvon (lowLandPrice) sekä halvimman asunnon kauppa-arvon (lowPrice), saamme keskimääräisen
+RAKENNUKSEN arvon erotuksella, eli avBuildingPrice = lowPrice - lowLandPrice.
+
+Ricardon maankäytön perusteorian mukaan "paras maa otetaan käyttöön ensin", ja siis huonoin viimeiseksi. Joten
+puhtaasti teoreettisesti uusimmat rakennukset sijaitsevat huonoimmalla maalla, ja tätä marginaalin rakennuksen arvoa
+voidaan käyttää suhteellisen hyvin koko kunnan rakennusten keskimääräisenä arvona.
+
+Joten saamme:
+
+highLandPrice = highPrice - avBuildingPrice
+............................................
+
+
+avLandPrice
+------------
+
+Kuten edellä
+
+avLandPrice = avPrice - avBuildingPrice
+.........................................
+
+Käytännössä lienee kuitenkinn niin, että sijainnin paremmuus näkyy myös rakennusten arvossa, joten voidaan olettaa, että
+erotusarvomenetelmä yliarvostaa tonttien arvoa siirryttäessä kohti keskustaa. Jakosuhdemenetelmän taas voidaan olettaa aliarvostavan
+tonttien arvoa.
+
+
+2. Jakosuhdemenetelmä
+---------------------
+
+Jakosuhdemenetelmä on yhdistelmä kauppa-arvo- ja kustannusarvomenetelmää. Kaupunkien asuntomarkkinoilla kustannusarvomenetelmä
+on IVS:ssä periaatteessa kielletty. Mutta menetelmä on kuitenkin hyvin selkeä ja yksinkertainen ja puoltaa paikkaansa.
+Se perustuu siihen oletukseen, että arvokkaammalle maalle rakennetaan myös arvokkaampia rakennuksia, ja tämä rakennuksen ja
+tontin välille jakautuneen arvon suhde pysyy jotakuinkin vakiona.
+
+Lasketaan siis highLandPrice ja avLandPrice myös jakosuhdemenetelmällä.
+
+Jakosuhdevakio lasketaan uuden omakotitalon rakennuskustannusten sekä rakentamattoman tontin (rajatontin) arvon perusteella.
+
+Uuden omakotitalon rakennuskustannus määritellään kolmen lähteen perusteella:
+
+1. Pientaloteollisuuden laskelmien mukaan
+
+https://www.pientaloteollisuus.fi/fin/rakentajalle/keskimaarainen-omakotitalo/kustannukset/
+
+2.Talopaketin muuttovalmiin hinnan perusteella
+
+https://www.alvsbytalo.fi/talopaketit/
+
+3.Tilastokeskuksen rakennuskustannusindeksin perusteella, jolla oikaistaan tarvittaessa edelliset tiedot kohdehetkeen
+
+https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__rki/statfin_rki_pxt_11na.px/table/tableViewLayout1/
+
+Vuodelle 2022 nämä antavat seuraavat hinnat rakenukselle:
+
+1. Vuonna 2019 PTT:n mukaan rakennuskustannus oli
+
+2053 e/kem2
+
+rakennushintaindeksin mukaan indeksi oli vuonna 2019 104,1 ja vuonna 2022 118.5 eli
+
+Rakennuskustannus vuonna 2022 on 118,5 * 2053 / 104,1 = 2337 e/kem2
+                                                        ............
+
+2. Vuonna 2022 muuttovalmiin Älvsbytalon (Siiri) hinta on
+
+153 900 / 62,5 m2 = 2462 e/kem2
+                    ............
+
+Näiden kahden keskiarvo on 2400 e/kem2
+                           ...........
+
+Joten vuonnma 2022
+
+jakosuhde = lowlandPrice / 2400
+................................
+
+ja jakosuhdemenetelmällä laskettu
+
+highLandPrice-2 = highPrice * jakosuhde
+.......................................
+
+ja
+
+avLandPrice-2 = avPrice * jakosuhde
+...................................
+
+
+Tonttiarvot tulokset
+---------------------
+
+lowLandPrice = lowLandPrice
+avLandPrice = avLandPrice-1 + avLandPrice-2 / 2
+highLandPrice = highLandPrice-1 + highLandPrice-2 / 2
+
+
+TONTTIVUOKRAT
+==============
+
+Tontin "arvo" tarkoittaa sen vuokratulon (tulovirran) pääoma-arvoa. Vuokratulon muuttamista arvoksi, eli pääoma-arvoksi, kutsutaan
+tulovirran kapitalisoimikseksi. Tämä laskelma on teoreettisesti korkoa-korolle laskun kaava. Markkinoilla kuitenkin tavanomaisesti
+toimitaan vain yksikertaistetun kaavan mukaan eli Korko = Tulovirta / Pääoma. Joten kun tiedämme markkinoilla käytetyn koron
+sijoitukselle voimme laskea siis tonttivuokrat tonttihinnoista kaavalla Tulovirta = Korko * Pääoma eli
+Tonttivuokra = Korko * Tonttihinta. Teoriassa korko sijoitukselle on vain riskipreemio, ja kun maata tavallisesti pidetään
+hyvin matalariskisenä sijoituksena, käyttävät sijoittajat korkona tavallisesti n. 5% korkoa. Esim:
+https://www.valuepenguin.com/mortgages/how-do-you-get-a-land-loan
+
+Tämä korko voidaan selvittää vertaamalla asuntojen markkinavuokria asuntojen markkinahintoihin. Laskemme tässä kuitenkin
+tonttivuokrat de-kapitalisoimalla tonttien arvot tonttivuokriksi 5% korolla edellä esitetyn kaavan mukaan. Kaavalla saadaan
+vuosivuokra, mutta koska vuokra tavallisesti ilmoitetaan kuukausivuokrana, jaetaan tulos 12:lla, ja saadaan vuokran yksikoksi
+siis e/kem2/kk.
+
+Joten 
+
+avLandRent = 5% * avlandPrice /12
+highLandRent = 5% * highLandPrice / 12
+lowLandRent = 5% * lowLandPrice / 12
+
+
