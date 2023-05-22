@@ -2,6 +2,19 @@ Lähteet ja laskentakaavat (esimerkkinä Helsinki)
 =================================================
 --------------------------------------------------
 
+Laskettavat muuttujat ovat
+
+avPrice
+lowPrice
+hightPrice
+lowLandPrice
+highLandPrice
+avLandPrice
+avLandRent
+highLandRent
+lowLandRent
+
+
 
 Asuntojen, koko kiinteistön, hinnat
 ====================================
@@ -15,7 +28,7 @@ https://www.asuntojenhinnat.fi/myytyjen-asuntojen-tilastot/kunta/helsinki
 
 Sivulla on grafiikka, josta hiirellä saa näkyviin toteutuneuden kauppojen keskihinnat vuosineljänneksittäin.
 
-avprice = käytetään vuoden TOISEN neljänneksen hintaa
+avprice = käytetään vuoden viimeisen neljänneksen hintaa
 ........................................................
 
 
@@ -141,7 +154,7 @@ Näiden kahden keskiarvo on 2400 e/kem2
 
 Joten vuonnma 2022
 
-jakosuhde = lowlandPrice / 2400
+jakosuhde = lowlandPrice / (lowlandPrice+2400)
 ................................
 
 ja jakosuhdemenetelmällä laskettu
@@ -185,4 +198,80 @@ avLandRent = 5% * avlandPrice /12
 highLandRent = 5% * highLandPrice / 12
 lowLandRent = 5% * lowLandPrice / 12
 
+Keskivuokra saadaan linkistä:
 
+https://asuntojen.hintatiedot.fi/haku/vuokratiedot?c=tampere&ps=&r=2&renderType=renderTypeTable
+Tämä tieto tulee eri tilastosta kuin keskimääräisten asuntojen hintatiedot eikä sen perusteella lasketa mitään.
+Se on lisäinformaatiota ja lienee kohtuullisen yhteensopiva muiden keskiarvotietojen tietojen kanssa.
+
+avRent = kaikkien vanhojen vapaarahoitteisten asuntojen keskivuokra
+
+
+YHTEENVETO
+=============
+
+Helsingin muuttujien arvot
+
+avPrice = 5144
+lowPrice = 2500
+hightPrice = 9327
+lowLandPrice = 1,25 * 1137 = 1421
+
+avBuldingPrice = 2500 - 1421 = 1079
+highLandPrice-1 = 9327 - 1079 = 8248
+avLandPrice-1 = 5144 - 1079 = 4065
+buildingCost = 2400
+jakosuhde = 1421 / 3821 = 0,372
+highLandPrice-2 = 9327 * 0,372 = 3470
+avLandPrice-2 = 5144 * 0,372 = 1914
+
+avLandPrice = (4065+1914)/2 = 2990
+highLandprice = (8248+3470)/2 = 5850
+avLandRent = 5% * 2990 / 12 = 12,46 e/kem2/kk
+highLandRent = 5% * 5840 / 12 = 24,33 e/kem2/kk
+lowLandRent = 5% * 1421 / 12 = 5,92  e/kem2/kk
+avRent = 19,7
+
+Espoon muuttujien arvot
+
+avPrice = 4087
+lowPrice = 2718
+hightPrice = 6250
+lowLandPrice = 1,25 * 1098 = 1373
+
+avBuldingPrice = 2718 - 1373 = 1345
+highLandPrice-1 = 6250 - 1345 = 4905
+avLandPrice-1 = 4087 - 1345 = 2742
+buildingCost = 2400
+jakosuhde = 1373 / 3773 = 0,364
+highLandPrice-2 = 6250 * 0,364 = 2275
+avLandPrice-2 = 4087 * 0,363 = 1484
+
+avLandPrice = (2742+1484)/2 = 2113
+highLandprice = (4905+2275)/2 = 3590
+avLandRent = 5% * 2113 / 12 = 8,80 e/kem2/kk
+highLandRent = 5% * 3590 / 12 = 14,96 e/kem2/kk
+lowLandRent = 5% * 1373 / 12 = 5,72  e/kem2/kk
+avRent = 17,4
+
+Vantaan muuttujien arvot
+
+buildingCost = 2400
+avPrice = 3191
+lowPrice = 2042
+highPrice = 4481
+lowLandPrice = 1,25 * 865 = 1081
+
+avBuldingPrice = lowPrice - lowLandPrice = 961
+highLandPrice-1 = highPrice - avBuildingPrice = 3520
+avLandPrice-1 = avPrice - avBuildingPrice = 2230
+jakosuhde = lowLandPrice / (lowLandPrice+buildingCost) = 0,311
+highLandPrice-2 = highPrice * jakosuhde = 1394
+avLandPrice-2 = avPrice * jakosuhde = 992
+
+avLandPrice = (avLandPrice-1+avLandPrice-2)/2 = 1611
+highLandprice = (highLandPrice-1+highLandPrice-2)/2 = 2457
+avLandRent = 5% * avLandPrice / 12 = 6,71
+highLandRent = 5% * highLandprice / 12 = 10,24
+lowLandRent = 5% * lowLandPrice / 12 = 4,50
+avRent = 17,5

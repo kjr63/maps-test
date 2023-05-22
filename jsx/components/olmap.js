@@ -12,7 +12,7 @@ import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {fromLonLat} from 'ol/proj';
 import Control from 'ol/control/Control.js';
-//import {akaaData, alajarviData} from '../../data/data.js';
+import {mapData} from '../../data/data.js';
 
 //console.log ('import', akaaData);
 
@@ -62,54 +62,28 @@ const outSubt1 = '<div class="town-subt">keskimääräinen hinta per m2</div>';
 const outSubt2 = '<div class="town-subt">alin hinta per m2</div>';
 const outSubt3 = '<div class="town-subt">korkein hinta per m2</div>';
 const outSubt4 = '<div class="town-subt">keskimääräinen tonttivuokra per m2/kk</div>';
-const outSubt5 = '<div class="town-subt">keskimääräinen tonttihinta per m2 </div>';
+const outSubt5 = '<div class="town-subt">keskimääräinen tonttiarvo per m2 </div>';
 const outSubt6 = '<div class="town-subt">alin tonttivuokra per m2/kk </div>';
-const outSubt7 = '<div class="town-subt">alin tonttihinta per m2 </div>';
+const outSubt7 = '<div class="town-subt">alin tonttiarvo per m2 </div>';
 const outSubt8 = '<div class="town-subt">korkein tonttivuokra per m2/kk </div>';
-const outSubt9 = '<div class="town-subt">korkein tonttihinta per m2 </div>';
+const outSubt9 = '<div class="town-subt">korkein tonttiarvo per m2 </div>';
+const outSubt10 = '<div class="town-subt">keskimääräinen vuokra per m2/kk</div>';
 const outVal = '<div class="town-value">';
 function outputTooltip (data) {
 	let result = 
 		outTitle+'<b>'+data[0]+'</b>'+outEnd+
-		outSubt1+outVal+data[1]+outEnd+ //Keskimääräinen hinta per m2
-		outSubt4+outVal+data[2]+outEnd+ //Keskimääräinen tonttivuokra
+		//outSubt1+outVal+data[1]+outEnd+ //Keskimääräinen hinta per m2
+		//outSubt2+outVal+data[8]+outEnd+ //Alin hinta per m2
+		//outSubt3+outVal+data[9]+outEnd+ //Korkein hinta per m2		
 		outSubt5+outVal+data[3]+outEnd+ //Keskimääräinen tonttihinta
-		outSubt6+outVal+data[4]+outEnd+ //Alin tonttivuokra
 		outSubt7+outVal+data[5]+outEnd+ //Alin tonttihinta
-		outSubt8+outVal+data[6]+outEnd+ //Korkein tonttivuokra
-		outSubt9+outVal+data[7]+outEnd+ //Korkein tonttihinta
-		outSubt2+outVal+data[8]+outEnd+ //Alin hinta per m2
-		outSubt3+outVal+data[9]+outEnd ; //Korkein hinta per m2		
+		outSubt9+outVal+data[7]+outEnd+ //Korkein tonttihinta		
+		//outSubt10+outVal+data[10]+outEnd+ //Keskimääräinen vuokra per m2/kk
+		outSubt4+outVal+data[2]+outEnd+ //Keskimääräinen tonttivuokra
+		outSubt6+outVal+data[4]+outEnd+ //Alin tonttivuokra
+		outSubt8+outVal+data[6]+outEnd; //Korkein tonttivuokra
 	return result;
 }
-
-const mapData = [
-
-	{	town: 'Helsinki',
-		coords: fromLonLat([ 24.943536799, 60.166640739 ]),
-		avPrice: 		'100e',
-		avLandrent: 	'100e',
-		avLandPrice:	'100e',
-		lowLandRent:	'100e',
-		lowLandPrice:	'100e',
-		highLandRent:	'100e',
-		highLandPrice:	'100e',
-		lowPrice:		'100e',
-		highPrice:		'100e'
-	},
-	{	town: 'Espoo',
-		coords: fromLonLat([ 24.656728549, 60.206376371 ]),
-		avPrice: 		'100e',
-		avLandrent: 	'100e',
-		avLandPrice:	'100e',
-		lowLandRent:	'100e',
-		lowLandPrice:	'100e',
-		highLandRent:	'100e',
-		highLandPrice:	'100e',
-		lowPrice:		'100e',
-		highPrice:		'100e'
-	},	
-];
 
 for ( let i=0; i < mapData.length; i++ ) {
 	const dataOutput = [
@@ -122,10 +96,11 @@ for ( let i=0; i < mapData.length; i++ ) {
 		mapData [i].highLandRent,
 		mapData [i].highLandPrice,
 		mapData [i].lowPrice,
-		mapData [i].highPrice		
+		mapData [i].highPrice,		
+		mapData [i].avRent,	
 	];
 	const feature = new Feature ({
-		geometry: new Point (mapData [i].coords),
+		geometry: new Point (fromLonLat(mapData [i].coords)),
 		output: outputTooltip (dataOutput)
 	});
 	feature.setStyle(new Style({
@@ -270,7 +245,10 @@ export default class OlMap extends React.Component {
         return (
 			<div>
 				<div id="status"></div>}
-				<div id="title">TONTTIVUOKRAT 2022</div>}
+				<div id="title">
+					<div id="title__1">TONTTIVUOKRAT SUOMESSA 2022</div>
+					<div id="title__2">(Osoita kuntaa hiirellä)</div>
+				</div>}
 				<div id="tooltip"></div>
 				<main id="map" className="map"></main>					
 			</div>

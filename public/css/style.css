@@ -174,4 +174,10 @@ table, th, td {
   margin-top: 8rem;
   margin-left: 1rem;
   padding: 8px;
-  width: 20%; }
+  width: 30%;
+  text-align: center; }
+  #title__1 {
+    margin: 4px; }
+  #title__2 {
+    display: none;
+    font-size: 1.6rem; }
