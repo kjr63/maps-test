@@ -1,4 +1,4 @@
-Lähteet ja laskentakaavat (esimerkkinä Helsinki)
+Lähteet ja laskentakaavat (esimerkkinä pk-seutu)
 =================================================
 --------------------------------------------------
 
@@ -13,6 +13,9 @@ avLandPrice
 avLandRent
 highLandRent
 lowLandRent
+totalLand
+totalLandValue
+totalLandRent
 
 
 
@@ -20,7 +23,7 @@ Asuntojen, koko kiinteistön, hinnat
 ====================================
 
 
-avprice
+avPrice
 --------
 
 Saadaan sivustolta
@@ -37,7 +40,7 @@ lowPrice
 
 Edellä mainitulla sivulla on myös keskihinnat alueittain kunnassa
 
-lowPrice = halvimman alueen keskihinta vuoden 2. neljänneksellä
+lowPrice = halvimman alueen keskihinta
 .................................................................
 
 
@@ -102,17 +105,18 @@ Kuten edellä
 avLandPrice = avPrice - avBuildingPrice
 .........................................
 
-Käytännössä lienee kuitenkinn niin, että sijainnin paremmuus näkyy myös rakennusten arvossa, joten voidaan olettaa, että
+Käytännössä lienee kuitenkin niin, että sijainnin paremmuus näkyy myös rakennusten arvossa, joten voidaan olettaa, että
 erotusarvomenetelmä yliarvostaa tonttien arvoa siirryttäessä kohti keskustaa. Jakosuhdemenetelmän taas voidaan olettaa aliarvostavan
-tonttien arvoa.
+tonttien arvoa
 
 
 2. Jakosuhdemenetelmä
 ---------------------
 
 Jakosuhdemenetelmä on yhdistelmä kauppa-arvo- ja kustannusarvomenetelmää. Kaupunkien asuntomarkkinoilla kustannusarvomenetelmä
-on IVS:ssä periaatteessa kielletty. Mutta menetelmä on kuitenkin hyvin selkeä ja yksinkertainen ja puoltaa paikkaansa.
-Se perustuu siihen oletukseen, että arvokkaammalle maalle rakennetaan myös arvokkaampia rakennuksia, ja tämä rakennuksen ja
+on IVS:ssä periaatteessa kielletty. Mutta menetelmä on kuitenkin hyvin selkeä ja yksinkertainen ja puoltaa paikkaansa, kun sitä
+käytetään uustuotantoon.
+Jakosuhdemenetlmä lähtee siitä, että arvokkaammalle maalle rakennetaan myös arvokkaampia rakennuksia, ja tämä rakennuksen ja
 tontin välille jakautuneen arvon suhde pysyy jotakuinkin vakiona.
 
 Lasketaan siis highLandPrice ja avLandPrice myös jakosuhdemenetelmällä.
@@ -182,7 +186,7 @@ TONTTIVUOKRAT
 Tontin "arvo" tarkoittaa sen vuokratulon (tulovirran) pääoma-arvoa. Vuokratulon muuttamista arvoksi, eli pääoma-arvoksi, kutsutaan
 tulovirran kapitalisoimikseksi. Tämä laskelma on teoreettisesti korkoa-korolle laskun kaava. Markkinoilla kuitenkin tavanomaisesti
 toimitaan vain yksikertaistetun kaavan mukaan eli Korko = Tulovirta / Pääoma. Joten kun tiedämme markkinoilla käytetyn koron
-sijoitukselle voimme laskea siis tonttivuokrat tonttihinnoista kaavalla Tulovirta = Korko * Pääoma eli
+sijoitukselle, voimme laskea tonttivuokrat tonttihinnoista kaavalla Tulovirta = Korko * Pääoma eli
 Tonttivuokra = Korko * Tonttihinta. Teoriassa korko sijoitukselle on vain riskipreemio, ja kun maata tavallisesti pidetään
 hyvin matalariskisenä sijoituksena, käyttävät sijoittajat korkona tavallisesti n. 5% korkoa. Esim:
 https://www.valuepenguin.com/mortgages/how-do-you-get-a-land-loan
@@ -205,6 +209,30 @@ Tämä tieto tulee eri tilastosta kuin keskimääräisten asuntojen hintatiedot 
 Se on lisäinformaatiota ja lienee kohtuullisen yhteensopiva muiden keskiarvotietojen tietojen kanssa.
 
 avRent = kaikkien vanhojen vapaarahoitteisten asuntojen keskivuokra
+
+
+YHTEENSÄ
+===========
+
+Asuntojen määrä ja koko kunnittain saadaan tilastokeskukselta:
+
+https://pxdata.stat.fi/PxWeb/pxweb/fi/StatFin/StatFin__asas/statfin_asas_pxt_115a.px/
+
+Tilastokeskus ei tilastoi asuntojen määrää, vain asuntokuntien määrän. Lehtitietojen mukaan kuitenkin
+yli 11% asunnoista on tyhjillään, joten asuntokuntiin täytyy lisätä tämä saadaksemme asuntomäärän
+
+Tyhjät asunnot:
+
+https://www.aamulehti.fi/uutiset/art-2000008869718.html
+
+empty = 11%
+
+joten 
+
+totalHousingLand = asuntokuntien määrä * keskimääräinen asunnon koko / 0,89
+
+totalHousingLandValue = totalHousingLand * avLandPrice
+totalHousingLandRent = 5% * totalHousingLandValue
 
 
 YHTEENVETO
@@ -232,6 +260,15 @@ highLandRent = 5% * 5840 / 12 = 24,33 e/kem2/kk
 lowLandRent = 5% * 1421 / 12 = 5,92  e/kem2/kk
 avRent = 19,7
 
+householdCount = 350 809
+avSize = 63,5
+empty = 0,89
+
+totalLand = householdCount * azSize / empty = 25,0296 * 10 pot 6
+totalLandValue = totalLand * avLandPrice = 74,8386 * 10 pot 9
+totalLandRent = totalLandValue * 5% = 3,7419 * 10 pot 9
+
+
 Espoon muuttujien arvot
 
 avPrice = 4087
@@ -254,6 +291,16 @@ highLandRent = 5% * 3590 / 12 = 14,96 e/kem2/kk
 lowLandRent = 5% * 1373 / 12 = 5,72  e/kem2/kk
 avRent = 17,4
 
+householdCount = 140 835
+avSize = 77,4
+empty = 0,89
+
+totalLand = householdCount * azSize / empty = 12,2479 * 10 pot 6
+totalLandValue = totalLand * avLandPrice = 25,8798 * 10 pot 9
+totalLandRent = totalLandValue * 5% = 1,2940 * 10 pot 9
+
+
+
 Vantaan muuttujien arvot
 
 buildingCost = 2400
@@ -275,3 +322,17 @@ avLandRent = 5% * avLandPrice / 12 = 6,71
 highLandRent = 5% * highLandprice / 12 = 10,24
 lowLandRent = 5% * lowLandPrice / 12 = 4,50
 avRent = 17,5
+
+householdCount = 118 060
+avSize = 70,5
+empty = 0,89
+
+totalLand = householdCount * azSize / empty = 9,3519 * 10 pot 6
+totalLandValue = totalLand * avLandPrice = 15,0660 * 10 pot 9
+totalLandRent = totalLandValue * 5% = 0,7533 * 10 pot 9'
+
+
+
+23.5.2023 Helsinki
+Kaj Risberg
+kaj.risberg@helsinkinet.fi

@@ -11,7 +11,10 @@ export const mapData = [
 		highLandPrice:	'5850 e',
 		lowPrice:		'2500 e',
 		highPrice:		'9327 e',
-		avRent:			'19,70 e'
+		avRent:			'19,70 e',
+		totalLand:		'25 029 600',
+		totalLandValue:	'74 839',
+		totalLandRent:	'3 742',
 	},
 	{	town: 'Espoo',
 		coords: 		[ 24.656728549, 60.206376371 ],
@@ -24,7 +27,10 @@ export const mapData = [
 		highLandPrice:	'3590 e',
 		lowPrice:		'2718 e',
 		highPrice:		'6250 e',
-		avRent:			'17,40 e'
+		avRent:			'17,40 e',
+		totalLand:		'12 247 900',
+		totalLandValue:	'25 880',
+		totalLandRent:	'1 294',
 	},
 	{	town: 'Vantaa',
 		coords:			[ 25.006641332, 60.298133721 ],
@@ -37,7 +43,10 @@ export const mapData = [
 		highLandPrice:	'2457 e',
 		lowPrice:		'2042 e',
 		highPrice:		'4481 e',
-		avRent:			'17,50 e'
+		avRent:			'17,50 e',
+		totalLand:		'9 351 900',
+		totalLandValue:	'15 066',
+		totalLandRent:	'753',
 	},	
 ];
 

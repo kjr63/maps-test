@@ -166,13 +166,24 @@ table, th, td {
 .town-value {
   font-size: 1.5rem; }
 
+.town-title__2 {
+  font-size: 1.6rem;
+  background-color: lightgray;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 8px; }
+
+.controls {
+  position: relative; }
+
 #title {
+  position: absolute;
+  top: 8rem;
+  left: 2rem;
   font-size: 2rem;
   background-color: white;
   border: 1px solid #454140;
   border-radius: 2rem;
-  margin-top: 8rem;
-  margin-left: 1rem;
   padding: 8px;
   width: 30%;
   text-align: center; }
@@ -181,3 +192,20 @@ table, th, td {
   #title__2 {
     display: none;
     font-size: 1.6rem; }
+
+#report {
+  position: absolute;
+  bottom: 4rem;
+  left: 2rem;
+  font-size: 1.6rem;
+  background-color: ghostwhite;
+  border: 1px solid #454140;
+  border-radius: 2rem;
+  margin-top: 32rem;
+  margin-left: 1rem;
+  padding: 4px;
+  width: 15%;
+  text-align: center; }
+  #report__hlink {
+    text-decoration: none;
+    color: black; }

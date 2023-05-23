@@ -68,10 +68,14 @@ const outSubt7 = '<div class="town-subt">alin tonttiarvo per m2 </div>';
 const outSubt8 = '<div class="town-subt">korkein tonttivuokra per m2/kk </div>';
 const outSubt9 = '<div class="town-subt">korkein tonttiarvo per m2 </div>';
 const outSubt10 = '<div class="town-subt">keskimääräinen vuokra per m2/kk</div>';
+const outTitle2 = '<div class="town-title__2">Yhteensä kunnan ';
+const outSubt11 = '<div class="town-subt">asuntotonttien kokonaismäärä kem2</div>';
+const outSubt12 = '<div class="town-subt">asuntotonttimaan kokonaisarvo miljoonaa euroa</div>';
+const outSubt13 = '<div class="town-subt">asuntotonttimaan vuokratuotto vuodessa miljoonaa euroa</div>';
 const outVal = '<div class="town-value">';
 function outputTooltip (data) {
 	let result = 
-		outTitle+'<b>'+data[0]+'</b>'+outEnd+
+		outTitle+'<b>'+data[0]+'</b>'+' markkinahintaan'+outEnd+
 		//outSubt1+outVal+data[1]+outEnd+ //Keskimääräinen hinta per m2
 		//outSubt2+outVal+data[8]+outEnd+ //Alin hinta per m2
 		//outSubt3+outVal+data[9]+outEnd+ //Korkein hinta per m2		
@@ -81,7 +85,11 @@ function outputTooltip (data) {
 		//outSubt10+outVal+data[10]+outEnd+ //Keskimääräinen vuokra per m2/kk
 		outSubt4+outVal+data[2]+outEnd+ //Keskimääräinen tonttivuokra
 		outSubt6+outVal+data[4]+outEnd+ //Alin tonttivuokra
-		outSubt8+outVal+data[6]+outEnd; //Korkein tonttivuokra
+		outSubt8+outVal+data[6]+outEnd+ //Korkein tonttivuokra
+		outTitle2+outEnd+
+		outSubt11+outVal+data[11]+outEnd+ //asuntojen määrä
+		outSubt12+outVal+data[12]+outEnd+ //asuintonttimaan arvo
+		outSubt13+outVal+data[13]+outEnd; //asuintonttimaan vuokratuotto
 	return result;
 }
 
@@ -98,6 +106,9 @@ for ( let i=0; i < mapData.length; i++ ) {
 		mapData [i].lowPrice,
 		mapData [i].highPrice,		
 		mapData [i].avRent,	
+		mapData [i].totalLand,	
+		mapData [i].totalLandValue,	
+		mapData [i].totalLandRent,	
 	];
 	const feature = new Feature ({
 		geometry: new Point (fromLonLat(mapData [i].coords)),
@@ -164,6 +175,7 @@ export default class OlMap extends React.Component {
 		const tooltip = document.getElementById('tooltip');
 		//const tiptitle = document.getElementById('tiptitle');		
 		const mapTitle = new Control({element: title});		
+		const valuationReport = new Control({element: report});		
 		const overlay = new Overlay({
 			element: tooltip,
 			offset: [10, 0],
@@ -178,12 +190,13 @@ export default class OlMap extends React.Component {
 			],
 			target: 'map',
 			view: new View({
-				center: fromLonLat([ 25.749498, 64.241678 ]),
-				zoom: 5,
+				center: fromLonLat([ 25.006641332, 60.298133721 ]),
+				zoom: 6,
 			}),
 		});
 		//overlay.setPosition(akaaCoords);
 		map.addControl(mapTitle);
+		map.addControl(valuationReport);
 		map.addOverlay(overlay);		
 /* 		map.on('click', function(evt) {
 		  if (map.forEachFeatureAtPixel(evt.pixel,
@@ -244,11 +257,16 @@ export default class OlMap extends React.Component {
     render () {
         return (
 			<div>
-				<div id="status"></div>}
-				<div id="title">
-					<div id="title__1">TONTTIVUOKRAT SUOMESSA 2022</div>
-					<div id="title__2">(Osoita kuntaa hiirellä)</div>
-				</div>}
+				<div id="status"></div>
+				<div className="controls">
+					<div id="title">
+						<div id="title__1">TONTTIVUOKRAT SUOMESSA 2022</div>
+						<div id="title__2">(Osoita kuntaa hiirellä)</div>
+					</div>
+					<div id="report">
+						<a id="report__hlink" href="vendor/doc.txt">Arvonmääritysraportti</a>
+					</div>
+				</div>
 				<div id="tooltip"></div>
 				<main id="map" className="map"></main>					
 			</div>
